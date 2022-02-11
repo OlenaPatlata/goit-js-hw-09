@@ -7,22 +7,32 @@ let idInterval = null;
 
 // Функция, которая вызывается при клике по кнопке Start
 const onChangeColor = (event) => {
+    onBtnDisabled ()
     idInterval = setInterval(() => {
     const color = getRandomHexColor();
     document.body.style.backgroundColor =`${color}`;
-    btnStartRef.disabled = true;
-    btnStopRef.disabled = false;}, 1000)
+    }, 1000)
 }
 
 // Функция, которая вызывается при клике по кнопке Stop
 const onStopChangeColor = (event) => {
     clearInterval(idInterval);
-    btnStartRef.disabled = false;
-    btnStopRef.disabled = true;
+    onBtnDisabled ()
 }
 // Функция для генерации случайного цвета 
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
+// Функция для смены статуса кнопок (disabled) с true на false
+function onBtnDisabled () {
+  if (!btnStartRef.disabled) {
+    btnStartRef.disabled = true;
+    btnStopRef.disabled = false
+  } else {
+    btnStartRef.disabled = false;
+    btnStopRef.disabled = true
+  }
 }
 
 // Вешаем слушателей на кнопки
