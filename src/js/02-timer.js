@@ -35,26 +35,34 @@ const options = {
 flatpickr("#datetime-picker", options);
 
 let object = {};
+
 const onCountTime = () => {
     idInterval = setInterval(() => {
-    const diff = msSelected - new Date().getTime();
+        const diff = msSelected - new Date().getTime();
+        if (diff <= 0) {
+            clearTimeout(idInterval);
+            return;
+        };
     object = convertMs(diff);
-    addLeadingZero(object);
-    spanDaysRef.textContent = object.days;
-    spanHoursRef.textContent = object.hours;
-    spanMinutesf.textContent = object.minutes;
-    spanSecondsRef.textContent = object.seconds;
+    onChangeContent(addLeadingZero(object));
     }, 1000)
 }
 
-function addLeadingZero (values) {
-    const keys = Object.keys(values)
+function addLeadingZero(values) {
+    const newValues = { ...values };
+    const keys = Object.keys(newValues)
     for (const key of keys) {
-        if (values[key] < 10) {
-            values[key]=String(values[key]).padStart(2,0)
-        }
-    }
-    return values;
+        newValues[key] = String(newValues[key]).padStart(2, 0)
+    } 
+    return newValues;
+}
+
+
+function onChangeContent({ days, hours, minutes, seconds }) {
+    spanDaysRef.textContent = days;
+    spanHoursRef.textContent = hours;
+    spanMinutesf.textContent = minutes;
+    spanSecondsRef.textContent = seconds;
 }
 
 
@@ -76,6 +84,5 @@ function convertMs(ms) {
 
     return { days, hours, minutes, seconds };
 }
-
 
 btnStartRef.addEventListener("click", onCountTime);
